@@ -1,0 +1,81 @@
+body {
+    font-family: 'Raleway', sans-serif;
+    background-color: rgba(248,238,209, 0.8); /* Light blue background for overall page */
+    padding: 30px;
+    text-align: center; /* Centering content */
+}
+
+ul,ol {
+    text-align: left;
+    display: inline-block;
+}
+
+pre.mermaid {
+    background-color: rgba(81, 97, 219, 0.5); /* White background for flowchart area */
+    border: 1px solid rgba(235,097,089, 1); /* Stesso colore del background color */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px;
+    margin: auto; /* Centering the flowchart */
+    max-width: 1200px; /* Maximum width of flowchart container */
+    overflow: auto; /* Ensures content is scrollable if it overflows */
+}
+
+/* New style for rect elements in mermaid diagrams*/ 
+pre.mermaid svg path {
+    fill: #320374;
+    stroke: #2c0fa2;
+    stroke-width: 4px;
+}
+
+/* Style for tooltips */
+.tooltip {
+    background-color: #f9f9f9; /* Light background for tooltips */
+    color: #333333; /* Dark text for tooltips */
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #d1d1d1;
+}
+
+/* Defining Highlight Style */
+
+.highlighted {
+    background-color: rgba(81, 97, 219, 0.4); /* background */
+    background-position: center;
+    border: 1px solid rgba(81, 97, 219, 0.7); /* border */
+    border-radius: 10px; /* To make the border more rounded :) */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    padding: 15px; /* Padding for inner spacing */
+    margin-bottom: 5px; /* Margin to separate from other elements */
+    transition: all 0.3s ease; /* Smooth transition for any changes */
+    width: 300px;
+    box-sizing: border-box;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Full width */
+    margin-top: 20px; /* Space between the flowchart and the container */
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the child divs horizontally */
+}
+
+.explained {
+    display: none; /* Initially hide all explained sections */
+    width: 80%; /* Adjust to your preference */
+    max-width: 800px; /* Maximum width */
+    margin: auto; /* Centering within content-wrapper */
+    /* Add other styles for padding, margins, etc. */
+}
+
+/* Let's try to make the close-button more nice*/ 
+.close-button {
+    opacity: 0.4;
+    background-color: rgba(81, 97, 219, 0.3);
+    box-shadow: none;
+}
+
