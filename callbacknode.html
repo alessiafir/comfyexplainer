@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Visualizing Comfy</title>
+    <!-- Include Raleway Font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <!-- Mermaid Script -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="/favicon_io/site.webmanifest">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+      #scrollToTopButton {
+      position: fixed;
+      bottom: 20px;
+      right: 30px;
+      z-index: 99;
+      font-size: 18px;
+      border: none;
+      outline: none;
+      background-color: #555;
+      color: white;
+      cursor: pointer;
+      padding: 15px;
+      border-radius: 4px;
+      display: none; /* Hidden by default */
+  }
+
+  #scrollToTopButton:hover {
+      background-color:rgba(81, 97, 219, 0.7);
+  }
+
+    </style>
+</head>
+<body>
+    <h3>Trying to visually understand ComfyUI</h3>
+    <pre class="mermaid">
+      flowchart LR
+        A([<b>Load Checkpoint</b>]) --> C([<b>CLIP Text Encode</b>]) & D([<b>VAE Decode</b>])
+        C --> E(["fa:fa-plus<b> Positive Prompt</b>"]) & F(["fa:fa-minus<b>Negative prompt</b>"])
+        A -- connect the model to the--> G([<b>KSampler</b>])
+        G --> D
+        D --> I(["fa:fa-camera-retro <b>Image</b>"])
+        E --> G
+        F --> G
+        I --> M(["<b>Preview</b>"]) & N(["<b>Save</b>"])
+        L([<b>ControlNet</b>]) --> C
+        H(["<b>Empty Latent Image</b>"]) --> G
+        click A callback "What is a Checkpoint"
+        click C callback "What is CLIP Text Encode"
+        click D callback "What is VAE Decode"
+        click E callback "What is a Positive Prompt"
+        click F callback "What is a Negative prompt"
+        click G callback "What is a KSampler"
+        click H callback "What is an Empty Latent image"
+        click I callback "Pretty self explainatory, but still, what is an Image in ComfyUI"
+        click L callback "What is ControlNet"
+      </pre>
+    <script>
+      window.onscroll = function() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+          document.getElementById("scrollToTopButton").style.display = "block";
+        } else {
+          document.getElementById("scrollToTopButton").style.display = "none";
+        }
+      };
+
+      function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth'});
+      }
+      function callback(nodeId) {
+        // Close all other explained sections and remove highlighting
+        ['a_explained', 'c_explained', 'd_explained', 'e_explained', 'f_explained', 'g_explained', 'h_explained', 'i_explained', 'l_explained'].forEach(function(id) {
+            var div = document.getElementById(id);
+            if (div) {
+                div.style.display = 'none';
+                div.classList.remove('highlighted');
+            }
+        });
+    
+        // Open and highlight the clicked explanation
+        var explainedId = nodeId.toLowerCase() + '_explained';
+        var explainedDiv = document.getElementById(explainedId);
+        if (explainedDiv) {
+            explainedDiv.style.display = 'block';
+            explainedDiv.classList.add('highlighted');
+            explainedDiv.scrollIntoView({ behavior: 'smooth', block: 'start'});
+        }
+    }
+  
+      mermaid.initialize({
+          startOnLoad: true,
+          flowchart: {
+              useMaxWidth: true,
+              htmlLabels: true,
+              curve: 'cardinal'
+          },
+          securityLevel: 'loose'
+      });
+      function closeExplanation(explainedId) {
+        document.getElementById(explainedId).style.display = 'none';
+      }
+    </script>  
+
+    <!-- Creating the part where if you click on A it expands and explains what A means-->
+    <div class="container">
+      <div class="content-wrapper">
+        <div id="a_explained" class="explained">
+          <h2> CHECKPOINT </h2>
+          <h3> Base models </h3>
+          <p> Base models we find are Stable diffusion v1.5 or XL. They are trained on a wide dataset and while they can achieve great results, they are not so good when we are looking for a specific style </p>
+          <h3> Fine-tuned models </h3>
+          <p> Fine-tuned models are trained on a narrow dataset to gain specific results similar to the dataset used for the training part (i.e.: anime-style genres or realistic portrait).
+            Think of SD 1.5 like a painter who makes general paintings, fine-tuned models are painters who have studied to replicate specific styles like Van Gogh style.
+          </p>
+          <h3> Useful Links </h3>
+          <p><a href="https://civitai.com/models" target="_blank">CivitAI</a> is a great resource for models.  
+          </p>
+          <button onclick="closeExplanation('a_explained')"class="close-button"><i class="far fa-window-close"></i></button>
+        </div>
+        <div id="b_explained" class="explained">
+          <h2> MODEL </h2>
+          <p>here is the explanation lol</p>
+          <button onclick="closeExplanation('b_explained')"class="close-button"><i class="far fa-window-close"></i></button>
+        </div>
+        <div id="c_explained" class="explained">
+          <h2> CLIP TEXT ENCODE </h2>
+          <p> Stable Diffusion model uses ClipText, which is OpenAI's language model, it has a very complex process involving the transformation of each word into embeddings </p>
+          <h3> How CLIP is trained </h3>
+          <p> CLIP has been trained on a dataset made of images and their captions. This allow CLIP to be both an image and text encoder </p>
+          <button onclick="closeExplanation('c_explained')"class="close-button"><i class="far fa-window-close"></i></button>
+        </div>
+        <div id="d_explained" class="explained">
+          <h2> VAE DECODE </h2>
+          <p>The <b>VAE Decode</b> can be used to decode the latent space images back into pixel space images. The <b>latent image</b> from the KSampler will be linked to <b>samples</b>" in the VAE decode. Then we can use the <b>vae</b> from the checkpoint or load a different vae</p>
+          <button onclick="closeExplanation('d_explained')"class="close-button"><i class="far fa-window-close"></i></button>
+        </div>  
+
+        <div id="e_explained" class="explained">
+          <h2> POSITIVE PROMPT </h2>
+          <p>Here we give the <b>positive prompt</b>, meaning we write what we will want to see in the final image. The CLIP text encoder will be very good at reading the words and understanding which image will perfectly fit your words</p>
+          <button onclick="closeExplanation('e_explained')"class="close-button"><i class="far fa-window-close"></i></button>
+        </div>
+
+        <div id="f_explained" class="explained">
+          <h2> NEGATIVE PROMPT </h2>
+          <p>Here we write what we do not want to see in the final image. For example in the positive prompt we wrote "beautiful man", but we don't want to have a picture of a beautiful man with glasses, here we will write "glasses". </p>
+          <button onclick="closeExplanation('f_explained')"class="close-button"><i class="far fa-window-close"></i></button>
+        </div>
+
+        <div id="g_explained" class="explained">
+          <h2> KSAMPLER </h2>
+          <p> KSampler is the most important part in Stable Diffusion, at least in my opinion, as here we can decide how the model will behave while generating the image.
+          </p>
+          <h3> KSampler Options </h3>
+          <p> In the KSampler node we can select many options and it is easy to get confused and lost in the process, let's try to see what can we do</p>
+          <ul>
+            <li>seed</li>
+            <li>control_after_generate</li>
+            <li>steps</li>
+            <li>cfg</li>
+            <li>sampler_name</li>
+            <li>scheduler</li>
+            <li>denoise</li>
+          </ul>
+          <button onclick="closeExplanation('g_explained')"class="close-button"><i class="far fa-window-close"></i></button>
+        </div>
+
+        <div id="h_explained" class="explained">
+          <h2> EMPTY LATENT IMAGE </h2>
+          <p> Our process will start with a random image in the latent space, in ComfyUI we can decide the size of the latent image, which will be proportional to the actual image in the pixel space.
+            We can decide the height, the weight and wheter we want one or more images generated by adjusting the batch size (i.e.: 3 batch size will get us 3 generated images in one run)
+          </p>
+          <button onclick="closeExplanation('h_explained')"class="close-button"><i class="far fa-window-close"></i></button>
+        </div>
+
+        <div id="i_explained" class="explained">
+          <h2> GENERATED IMAGE </h2>
+          <p>Finally you generated the image! In ComfyUI you can choose wheter previewing or saving the generated image.</p>
+          <button onclick="closeExplanation('i_explained')" class="close-button"><i class="far fa-window-close"></i></button>
+        </div>
+        <div id="l_explained" class="explained">
+          <h2>CONTROLNET</h2>
+          <p>ControlNet is a family of neural networks fine-tuned on Stable Diffusion that let us have more control over the generation of images. Introduced by <a href="https://arxiv.org/pdf/2302.05543.pdf" target="_blank">Zhang et al. (2023)</a>
+            Thanks to ControlNet we can control Stable Diffusion through single or multiple conditions, both with and without prompts.</p>
+          <h3>Why do we need ControlNet?</h3>
+          <p> We can think of ControlNet as an extra boost of control over the images we want to generate, especially if we want to achieve a specific pose or structure, thanks to ControlNet we can trace a shape that will guide the generation of the image.</p>
+          <h3>ControlNet models I like and wanted to mention</h3>
+          <ul>
+            <li>OpenPose</li>
+            <li>Sketch</li>
+            <li>Canny</li>
+          </ul>
+          <button onclick="closeExplanation('l_explained')" class="close-button"><i class="far fa-window-close"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <button onclick="scrollToTop()" id="scrollToTopButton" title="Scroll to the top"><i class="fas fa-chevron-up"></i></button>
+<h1> Useful resources </h1>
+<h2>ComfyUI</h2>
+<p><a href="https://jalammar.github.io/illustrated-stable-diffusion/" target="_blank">Great resource that explains Stable Diffusion visually</a></p>
+<p><a href="https://arxiv.org/abs/2307.01952" target="_blank">Paper about the introduction of Stable Diffusion XL</a>
+<p><a href="https://learnopencv.com/controlnet/" target="_blank">Nice blog article about ControlNet</a></li>
+<p><a href="https://openart.ai/workflows/all target=" target="_blank">Must see for getting inspired by many ComfyUI workflows</a>. Like <a href="https://openart.ai/workflows/booby_nutty_30/-/09EGyt3ZOBM9kD4ZZGP5" target="_blank">this one</a> where you can create AI pixel art with accurate pixel count</p>
+<h2>To build this website</h2>
+<p><a href="https://fontawesome.com/v5/search" target="_blank">Where I took the icons you are seeing</a></p>
+<p><a href="https://mermaid.js.org/" target="_blank">How I built the flowchart</a></p>
+<p><a href="https://fonts.google.com/" target="_blank">For the fonts of the website</a></p>
+</body>
+</html>
